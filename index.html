@@ -139,7 +139,16 @@ otpForm.addEventListener("submit", async (e) => {
     otpForm.classList.add("hidden");
     usersPage.classList.remove("hidden");
 
-   
+    // Load users
+    const usersRes = await fetch("http://localhost:3000/users");
+    const users = await usersRes.json();
+    const usersList = document.getElementById("usersList");
+    usersList.innerHTML = "";
+    users.forEach(u => {
+      const li = document.createElement("li");
+      li.textContent = u.email;
+      usersList.appendChild(li);
+    });
   }
 });
 
