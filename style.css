@@ -71,3 +71,13 @@ body {
 * {
   box-sizing: border-box;
 }
+.auth-form input:focus{
+  border: 1px solid #2575fc;
+  box-shadow: 0 0 5px rgba(37,117,252,0.5);
+  outline: none;
+}
+
+::placeholder {
+  color: #999;
+  font-style: italic;
+}
