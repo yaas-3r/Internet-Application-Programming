@@ -92,3 +92,14 @@ body {
   font-weight: bold;
   margin-top: 10px;
 }
+@media (max-width: 480px) {
+  .auth-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .auth-toggle button {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
