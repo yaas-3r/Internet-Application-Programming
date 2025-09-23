@@ -121,6 +121,57 @@ app.post("/verify-otp", (req, res) => {
     }
   );
 });
+// Resend OTP route
+app.post("/resend-otp", (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  // Check if user exists
+  db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
+    if (err) return res.status(500).json({ message: "DB error" });
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = generateOTP();
+    db.query("INSERT INTO otps (email, otp) VALUES (?, ?)", [email, otp], (err) => {
+      if (err) return res.status(500).json({ message: "Error saving OTP" });
+
+      // Send OTP email again
+      transporter.sendMail({
+        from: '"Secure Login System" <your-email@gmail.com>',
+        to: email,
+        subject: "🔁 Your New OTP",
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+            <h2 style="color: #FF5733;">New OTP Requested</h2>
+            <p style="font-size: 16px; color: #333;">
+              Here’s your new <strong>One-Time Password (OTP)</strong>:
+            </p>
+            <div style="text-align: center; margin: 20px 0;">
+              <span style="font-size: 24px; font-weight: bold; color: #000; padding: 10px 20px; background: #eee; border-radius: 6px; display: inline-block;">
+                ${otp}
+              </span>
+            </div>
+            <p style="font-size: 14px; color: #666;">
+              This OTP is valid for <strong>5 minutes</strong>.
+            </p>
+          </div>
+        `
+      }, (error) => {
+        if (error) {
+          return res.status(500).json({ message: "Error sending OTP email" });
+        }
+        res.json({ message: "📧 New OTP sent to your email!" });
+      });
+    });
+  });
+});
+
 
 // Get all users (after login)
 app.get("/users", (req, res) => {
