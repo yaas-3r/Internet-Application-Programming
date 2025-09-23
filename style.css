@@ -58,11 +58,12 @@ body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .auth-form button:hover {
   background: #1a5edb;
+  transform: scale(1.02);
 }
 
 .hidden {
