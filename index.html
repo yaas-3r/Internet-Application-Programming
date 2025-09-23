@@ -7,13 +7,15 @@
 </head>
 <body>
   <div class="auth-container">
+    <h2>Welcome</h2>
+    <div class="auth-footer">© 2025 Group Project</div>
     <div class="auth-toggle">
       <button id="showLogin" class="active">Log In</button>
       <button id="showSignup">Sign Up</button>
     </div>
 
     <!-- LOGIN FORM -->
-    <form id="loginForm" class="auth-form">
+    <form id="loginForm" class="auth-form" onsubmit="return validateForm('loginForm')">
       <h2>Log In</h2>
       <input type="email" id="loginEmail" placeholder="Email" required>
       <input type="password" id="loginPassword" placeholder="Password" required>
@@ -151,5 +153,20 @@ otpForm.addEventListener("submit", async (e) => {
     });
   }
 });
+ // Simple validation for signup/login forms
+  function validateForm(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll("input[required]");
+    let valid = true;
+
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        alert(`${input.placeholder || input.name} is required`);
+        valid = false;
+      }
+    });
+
+    return valid;
+  }
 
 </script>
