@@ -43,6 +43,7 @@
       <ul id="usersList"></ul>
     </div>
   </div>
+  <button type="button" onclick="resendOtp()">Resend OTP</button>
 
   <script src="script.js"></script>
 </body>
@@ -167,6 +168,24 @@ otpForm.addEventListener("submit", async (e) => {
     });
 
     return valid;
+  }
+
+  async function resendOtp() {
+    const email = document.querySelector("#loginForm input[name='email']").value;
+    if (!email) return alert("Enter your email first");
+
+    const res = await fetch("/resend-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      alert("Error: " + data.error);
+    } else {
+      alert(data.message);
+    }
   }
 
 </script>
